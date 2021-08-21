@@ -8,6 +8,30 @@ class Line {
     this._theta_scl = 0.04;
     this._len_scl = 0.1;
     this._seed = Math.random() * 1000;
+    this._line_width = 8;
+
+    this._aberration = [
+      {
+        dx: -this._line_width / 3,
+        dy: 0,
+        stroke: new Color(255, 0, 0, 0.5),
+      },
+      {
+        dx: this._line_width / 3,
+        dy: 0,
+        stroke: new Color(255, 255, 0, 0.5),
+      },
+      {
+        dx: 0,
+        dy: -this._line_width / 3,
+        stroke: new Color(0, 0, 255, 0.8),
+      },
+      {
+        dx: 0,
+        dy: 0,
+        stroke: new Color(240, 240, 240, 1),
+      }
+    ];
   }
 
   move(percent) {
@@ -25,11 +49,18 @@ class Line {
   show(ctx) {
     ctx.save();
     ctx.rotate(this._theta);
-    ctx.strokeStyle = "rgb(245, 245, 245)";
     ctx.lineWidth = 8;
-    ctx.beginPath();
-    ctx.arc(0, 0, this._r, 0, this._len);
-    ctx.stroke();
+
+    this._aberration.forEach(c => {
+      ctx.save();
+      ctx.translate(c.dx, c.dy);
+      ctx.strokeStyle = c.stroke.rgba;
+      ctx.beginPath();
+      ctx.arc(0, 0, this._r, 0, this._len);
+      ctx.stroke();
+      ctx.restore();
+    });
+
     ctx.restore();
   }
 

@@ -4,7 +4,7 @@ class Sketch extends Engine {
     this._duration = 900;
     this._lines_num = 10;
     this._max_line_len = Math.PI;
-    this._scl = 0.9;
+    this._scl = 0.85;
   }
 
   setup() {
@@ -37,6 +37,7 @@ class Sketch extends Engine {
     this.ctx.translate(this.width / 2, this.height / 2);
     this.ctx.scale(this._scl, this._scl);
 
+    this.ctx.globalCompositeOperation = "screen";
     this._lines.forEach(l => {
       l.move(percent);
       l.show(this.ctx);
