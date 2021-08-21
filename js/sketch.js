@@ -1,18 +1,37 @@
-/*
-  HTML canvas sketch. GitHub repo and some basic documentation: https://github.com/lorossi/empty-html5-canvas-project
-  Made by Lorenzo Rossi. Website and contacts: https://lorenzoros.si/
-*/
-
 class Sketch extends Engine {
   preload() {
-    // ran once. Ideally, this has never to be called again
+    this._recording = false;
+    this._duration = 900;
+
   }
 
   setup() {
-    // ran once. This can be called multiple times
+    // noise setup
+    this._simplex = new SimplexNoise();
+    // capturer setup
+    if (this._recording) {
+      this._capturer = new CCapture({ format: "png" });
+    }
+    this._capturer_started = false;
   }
 
   draw() {
-    // looping continuously at a set framerate
+    if (!this._capturer_started && this._recording) {
+      this._capturer_started = true;
+      this._capturer.start();
+      console.log("%c Recording started", "color: green; font-size: 2rem");
+    }
+
+
+    if (this._recording) {
+      if (this._frameCount < this._duration) {
+        this._capturer.capture(this._canvas);
+      } else {
+        this._recording = false;
+        this._capturer.stop();
+        this._capturer.save();
+        console.log("%c Recording ended", "color: red; font-size: 2rem");
+      }
+    }
   }
 }
