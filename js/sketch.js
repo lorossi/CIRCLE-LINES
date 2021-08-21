@@ -2,9 +2,10 @@ class Sketch extends Engine {
   preload() {
     this._recording = false;
     this._duration = 900;
-    this._lines_num = 10;
-    this._max_line_len = Math.PI;
-    this._scl = 0.85;
+    this._lines_num = 11;
+    this._max_line_len = Math.PI * 2;
+    this._min_line_len = Math.PI / 3;
+    this._scl = 0.8;
   }
 
   setup() {
@@ -19,7 +20,7 @@ class Sketch extends Engine {
     this._lines = [];
     for (let i = 0; i < this._lines_num; i++) {
       const r = (this.width / 2 * (i + 1)) / this._lines_num;
-      this._lines.push(new Line(r, this._max_line_len, this._simplex));
+      this._lines.push(new Line(r, this._min_line_len, this._max_line_len, this._simplex));
     }
   }
 
@@ -55,5 +56,9 @@ class Sketch extends Engine {
         console.log("%c Recording ended", "color: red; font-size: 2rem");
       }
     }
+  }
+
+  click() {
+    this.setup();
   }
 }

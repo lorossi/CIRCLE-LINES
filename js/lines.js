@@ -1,7 +1,8 @@
 class Line {
-  constructor(radius, max_len, simplex) {
+  constructor(radius, min_len, max_len, simplex) {
     this._r = radius;
     this._max_len = max_len;
+    this._min_len = min_len;
     this._simplex = simplex;
 
     this._theta = 0;
@@ -14,22 +15,22 @@ class Line {
       {
         dx: -this._line_width / 3,
         dy: 0,
-        stroke: new Color(255, 0, 0, 0.5),
+        color: new Color(255, 0, 0, 0.5),
       },
       {
         dx: this._line_width / 3,
         dy: 0,
-        stroke: new Color(255, 255, 0, 0.5),
+        color: new Color(255, 255, 0, 0.5),
       },
       {
         dx: 0,
         dy: -this._line_width / 3,
-        stroke: new Color(0, 0, 255, 0.8),
+        color: new Color(0, 0, 255, 0.8),
       },
       {
         dx: 0,
         dy: 0,
-        stroke: new Color(240, 240, 240, 1),
+        color: new Color(240, 240, 240, 1),
       }
     ];
   }
@@ -43,10 +44,12 @@ class Line {
     this._theta = n * Math.PI * 2 * 10;
 
     n = this._noise(nx * this._len_scl, ny * this._len_scl, 0, this._seed);
-    this._len = n * this._max_len;
+    this._len = n * (this._max_len - this._min_len) + this._min_len;
   }
 
   show(ctx) {
+    ctx.save();
+
     ctx.save();
     ctx.rotate(this._theta);
     ctx.lineWidth = 8;
@@ -54,10 +57,23 @@ class Line {
     this._aberration.forEach(c => {
       ctx.save();
       ctx.translate(c.dx, c.dy);
-      ctx.strokeStyle = c.stroke.rgba;
+      ctx.strokeStyle = c.color.rgba;
       ctx.beginPath();
       ctx.arc(0, 0, this._r, 0, this._len);
       ctx.stroke();
+      ctx.restore();
+    });
+    ctx.restore();
+
+    ctx.rotate(this._theta + Math.PI + this._len / 2);
+
+    this._aberration.forEach(c => {
+      ctx.save();
+      ctx.translate(c.dx, c.dy);
+      ctx.fillStyle = c.color.rgba;
+      ctx.beginPath();
+      ctx.arc(this._r, 0, this._line_width, 0, Math.PI * 2);
+      ctx.fill();
       ctx.restore();
     });
 
