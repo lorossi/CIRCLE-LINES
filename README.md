@@ -1,5 +1,13 @@
 # Circle lines
 
+Another simple looping animation made with bars and circles.
+
+The looping function works thanks to [jwagner's awesome simplex noise library](https://github.com/jwagner/simplex-noise.js).
+The bars are then slightly offset and coloured with a light shade, in order to emulate some fake color aberration *(because I think it looks cool and retro)*.
+Everything is built on top of my boilerplate for [HTML5 canvas](https://github.com/lorossi/empty-html5-canvas-project).
+
+There's is not much to say, but if you're curious, make sure to check my [Instagram profile!](https://instagram.com/lorossi97) to see what I like to do!
+
 ## Output
 
 ![video](output/output.gif)
